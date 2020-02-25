@@ -1,0 +1,81 @@
+* {
+  margin: 0;
+  padding: 0;
+  /* outline: 1px dotted red; */
+}
+
+html,
+body {
+  height: 100%;
+}
+
+#app {
+  /* height: 100%; */
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: black;
+}
+
+#score {
+  position: absolute;
+  /* top: 20px; */
+  /* left: 440px; */
+  color: white;
+  border: 1px solid white;
+  width: 100px;
+  padding: 10px;
+  text-align: center;
+}
+
+.pacman {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 40px;
+  width: 40px;
+  /* background-color: blue; */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.row {
+  line-height: 0;
+}
+
+.brick {
+  background-color: blue;
+  width: 40px;
+  height: 40px;
+  display: inline-block;
+}
+
+.coin {
+  width: 40px;
+  height: 40px;
+  display: inline-block;
+  background-image: url("images/coin.gif");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.empty {
+  background-color: black;
+  width: 40px;
+  height: 40px;
+  display: inline-block;
+}
+
+.cherry {
+  width: 40px;
+  height: 40px;
+  display: inline-block;
+  background-image: url("images/cherries.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}

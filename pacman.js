@@ -62,25 +62,26 @@ const pacmanObj = {
     this["position"][XorY] += num;
     // string concatination to replace the "rotate(" + rotate + "deg)"
     // this.hero.style.transform is the same as the following syntax
-    console.log("transform: " + `rotate(${rotate}deg)`);
-    console.log("top:       " + `${pacmanObj["position"]["y"] * blockWidth}px`);
-    console.log("left:      " + `${pacmanObj["position"]["x"] * blockWidth}px`);
+    // console.log("transform: " + `rotate(${rotate}deg)`);
+    // console.log("top:       " + `${pacmanObj["position"]["y"] * blockWidth}px`);
+    // console.log("left:      " + `${pacmanObj["position"]["x"] * blockWidth}px`);
 
     // using a jquery function called css we can use an object with key value pairs to set css properties
     //     https://api.jquery.com/css/#css-properties
-    // this["hero"].css({
     $("#hero").css({
       "transform": `rotate(${rotate}deg)`,
       "top": `${pacmanObj["position"]["y"] * blockWidth}px`,
       "left": `${pacmanObj["position"]["x"] * blockWidth}px`
     });
+    // failed attempts
+    // this["hero"].css({
     // this["hero"]["css"]("top", `${pacmanObj["position"]["y"] * blockWidth}px`);
     // this["hero"]["css"]("left", `${pacmanObj["position"]["x"] * blockWidth}px`);
 
     // ONLY update the score and the board to have the correct layout as pacman eats the coins
     let newBlockType = world[pacmanObj["position"]["y"]][pacmanObj["position"]["x"]];
     if (newBlockType == 1 || newBlockType > 2) {
-      console.log ("new block type: " + newBlockType);
+      // console.log ("new block type: " + newBlockType);
       world[pacmanObj["position"]["y"]][pacmanObj["position"]["x"]] = 0;
       if (newBlockType == 1) {
         score += 10;

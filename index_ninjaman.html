@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Ninjaman</title>
+    <style type="text/css">
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      .row {
+        line-height: 0;
+      }
+      .score {
+        background-color: black;
+        color: cornsilk;
+        height: 40px;
+        width: 150px;
+      }
+      .wall {
+        background-color: blue;
+        height: 40px;
+        width: 40px;
+        display: inline-block;
+      }
+      .sushi{
+        background-color: black;
+        height: 40px;
+        width: 40px;
+        display: inline-block;
+        background-image: url('img/sushi.png');
+        background-size: contain;
+      }
+      .onigiri{
+        background-color: black;
+        height: 40px;
+        width: 40px;
+        display: inline-block;
+        background-image: url('img/onigiri.png');
+        background-size: contain;
+      }
+      .blank{
+        background-color: black;
+        height: 40px;
+        width: 40px;
+        display: inline-block;
+      }
+      .changed{
+        background-color: red;
+        height: 40px;
+        width: 40px;
+        display: inline-block;
+      }
+      #ninjaman {
+        background-color: black;
+        height: 40px;
+        width: 40px;
+        display: inline-block;
+        background-image: url('img/ninja.gif');
+        background-size: contain;
+        position: absolute;
+        left: 40px;
+        top: 40px;
+      }
+    </style>
+    
+  </head>
+  <body>
+    <div id='score' class='score'></div>
+    <div id='world'></div>
+    <div id='ninjaman'></div>
+    
+  </body>
+
+  <script type="text/javascript">
+    // var world = [
+    //   [1,1,1,1,1],
+    //   [1,0,2,3,1],
+    //   [1,0,1,2,1],
+    //   [1,0,1,2,1],
+    //   [1,3,1,2,1],
+    //   [1,0,0,2,1],
+    //   [1,1,1,1,1]
+    // ];
+    var world = [];
+    var worldDict = {
+      0: 'blank',
+      1: 'wall',
+      2: 'sushi',
+      3: 'onigiri',
+      4: 'changed'
+    }
+
+    var ninjaman = {
+      x: 1,
+      y: 1,
+      score: 0
+    }
+    
+    function createWorld() {
+    //   we need to make sure that the squares have a blank or food space connected to
+    //     it - we cannot have walls connected to all 4 directions
+    //   we should have 2 different connected walls to each square would be ideal if we
+    //     are being chased by the "ghosts"
+      var direction;
+      var worldSize = 10;
+      world = new Array(worldSize);
+
+      // create the world with randomness
+      for (var y = 0 ; y < worldSize; y++) {
+        world[y] = new Array(worldSize);
+        for (var x = 0 ; x < worldSize ; x++) {
+          if (x == 0 || y == 0 || x == worldSize - 1 || y == worldSize - 1) {
+            world[y][x] = 1;
+          } else {
+            // random number from 0 - 3
+            world[y][x] = Math.floor(Math.random() * 4);
+          }
+        }
+      }
+
+      // ensure that we can access each coordinate in the world
+
+      // this is still not taking care of all "islands" that are unreachable...will come back to this later
+      for (var y = 0 ; y < worldSize ; y++) {
+        for (var x = 0 ; x < worldSize ; x++) {
+            if (world[y][x] != 1) {
+              if (world[y-1][x] == 1 && world[y][x-1] == 1 && world[y+1][x] == 1 && world[y][x+1] == 1) {
+                // world[y][x] = 0;
+                // randomly choose a direction that will allow access to this square by making it 
+                direction = Math.floor(Math.random() * 4);
+                if (direction = 0) {         // Left
+                  // Do not take away a border - instead change the opposite direction
+                  if (x-1 == 0) {
+                    world[y][x+1] = 4;
+                  } else {
+                    world[y][x-1] = 4;
+                  }
+                } else if (direction = 1) {  // Up
+                  // Do not take away a border - instead change the opposite direction
+                  if (y-1 == 0) {
+                    world[y+1][x] = 4;
+                  } else {
+                    world[y-1][x] = 4;
+                  }
+                } else if (dirction = 2) {   // Right
+                  // Do not take away a border - instead change the opposite direction
+                  if (x+1 == worldSize - 1) {
+                    world[y][x-1] = 4;
+                  } else {
+                    world[y][x+1] = 4;
+                  }
+                } else {                     // Down
+                  // Do not take away a border - instead change the opposite direction
+                  if (y + 1 == worldSize - 1) {
+                    world[y-1][x] = 4;
+                  } else {
+                    world[y+1][x] = 4;
+                  }
+                }
+              }
+            }
+        }
+      }
+      
+      // make the starting square for ninjaman blank so we don't move off and have a food there
+      world[1][1] = 0;
+    }
+    createWorld();
+
+    function drawWorld() {
+      document.getElementById('score').innerHTML = "SCORE:<br>" + ninjaman.score;
+
+      output = "";
+      for(var row = 0 ; row < world.length ; row++) {
+        output += "<div class='row'>";
+        for(var x = 0 ; x < world[row].length ; x++) {
+          output += "<div class='" + worldDict[world[row][x]] + "'></div>";
+        }
+        output += "</div>";
+      }
+
+      document.getElementById('world').innerHTML = output;
+    }
+    drawWorld();
+
+    function drawNinjaman() {
+      // we add 1 extra 40 px for the score div
+      document.getElementById('ninjaman').style.top = (1 + ninjaman.y) * 40 + "px";
+      document.getElementById('ninjaman').style.left= ninjaman.x * 40 + "px";
+    }
+    drawNinjaman();
+
+    document.onkeydown = function(e) {
+      console.log(e);
+      if (e.keyCode == 37) { // Left
+        direction = 'left';
+        if (world[ninjaman.y][ninjaman.x - 1] != 1) {
+          ninjaman.x--;
+        } 
+      } else if (e.keyCode == 38) { // Up
+        direction = 'top';
+        if (world[ninjaman.y - 1][ninjaman.x] != 1) {
+          ninjaman.y--;
+        } 
+      } else if (e.keyCode == 39) { // Right
+        direction = 'right';
+        if (world[ninjaman.y][ninjaman.x + 1] != 1) {
+          ninjaman.x++;
+        } 
+      } else if (e.keyCode == 40) { // Down
+        direction = 'down';
+        if (world[ninjaman.y + 1][ninjaman.x] != 1) {
+          ninjaman.y++;
+        } 
+      }
+
+      var locationValue = world[ninjaman.y][ninjaman.x];
+      if (locationValue > 1) {
+        if (worldDict[locationValue] == "onigiri") {
+          ninjaman.score += 5;
+        }
+        else if (worldDict[locationValue] == "sushi") {
+          ninjaman.score += 5;
+        }
+      }
+
+      world[ninjaman.y][ninjaman.x] = 0;
+      drawWorld();
+      drawNinjaman();
+    }
+  </script>
+</html>

@@ -21,8 +21,8 @@ body {
 
 #score {
   position: absolute;
-  /* top: 20px; */
-  /* left: 440px; */
+  top: 20px;
+  left: 440px;
   color: white;
   border: 1px solid white;
   width: 100px;
@@ -32,8 +32,8 @@ body {
 
 .pacman {
   position: absolute;
-  top: 0;
-  left: 0;
+  /* top: 0;
+  left: 0; */
   height: 40px;
   width: 40px;
   /* background-color: blue; */
